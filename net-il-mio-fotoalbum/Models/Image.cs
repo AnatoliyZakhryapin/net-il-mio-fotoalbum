@@ -14,7 +14,7 @@ namespace net_il_mio_fotoalbum.Models
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
         public List<Category> Categories { get; set; }
-        public long UserId { get; set; }
-        public User User { get; set; }
+        public long CreatedByProfileId { get; set; }
+        public Profile Profile { get; set; }
     }
 }

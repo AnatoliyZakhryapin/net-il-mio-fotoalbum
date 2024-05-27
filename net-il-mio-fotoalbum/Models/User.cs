@@ -1,15 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace net_il_mio_fotoalbum.Models
 {
-    [Table("user")]
-    public class User
+    public class User : IdentityUser
     {
-        public long UserID {  get; set; }
-        public string UserName { get; set; }
-        public string UserSurname { get; set; }
-        public List<Image> Images { get; set; }
-        public List<Message> Messages { get; set; }
-        public User() { }
+        //[Key]
+        //public override string Id {  get; set; }
+        public Profile Profile { get; set; }
     }
 }
