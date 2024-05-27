@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Components
+
+@{
+    ViewData["Title"] = "Create Category";
+    Layout = "_DashboardLayout";
+}
+
+@model Category
+
+<div class="container">
+    <div class="row">
+        <div class="col text-centr">
+           <h1>Create Category Form</h1>
+        </div>
+    </div>
+</div>
+
+
+
+<section class="create-pizza">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <form asp-controller="Category" asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="form-label">Name</label>
+                        <input asp-for="Name" type="text" class="form-control" id="name" placeholder="Insert name of category">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Salva</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
