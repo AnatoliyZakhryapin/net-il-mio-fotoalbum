@@ -17,11 +17,20 @@
                             <span class="d-sm-none d-md-inline">Home</span>
                         </a>
                     </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">
+                                <span><i class="fa-solid fa-list"></i></span>
+                                <span class="d-sm-none d-md-inline">Categories</span>
+                            </a>
+                        </li>
+                    }
                 </ul>
             </div>
             <div class="col-auto d-none d-sm-block" style="min-width: 138px;">
                 <div class="d-none d-sm-inline-flex justify-content-between">
-                    @if (User.IsInRole("ADMIN"))
+                    @if (User.IsInRole("Admin"))
                     {
                         <ul class="navbar-nav nav-underline ms-auto login d-sm-block">
                             <li class="nav-item">
