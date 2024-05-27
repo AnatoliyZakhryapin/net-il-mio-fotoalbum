@@ -2,7 +2,6 @@
 
 namespace net_il_mio_fotoalbum.Models
 {
-    [Table("message")]
     public class Message
     {
         public long MessageId { get; set; }

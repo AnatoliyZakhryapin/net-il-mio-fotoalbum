@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace net_il_mio_fotoalbum.Models
 {
-    [Table("profile")]
     public class Profile
     {
         public long ProfileId {  get; set; }

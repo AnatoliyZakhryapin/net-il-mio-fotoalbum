@@ -2,7 +2,6 @@
 
 namespace net_il_mio_fotoalbum.Models
 {
-    [Table("image")]
     public class Image
     {
         public long ImageId { get; set; }
