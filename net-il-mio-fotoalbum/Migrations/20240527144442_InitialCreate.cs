@@ -49,7 +49,7 @@ namespace net_il_mio_fotoalbum.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "category",
+                name: "Categories",
                 columns: table => new
                 {
                     CategoryId = table.Column<long>(type: "bigint", nullable: false)
@@ -58,7 +58,7 @@ namespace net_il_mio_fotoalbum.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_category", x => x.CategoryId);
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -168,7 +168,7 @@ namespace net_il_mio_fotoalbum.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "profile",
+                name: "Profiles",
                 columns: table => new
                 {
                     ProfileId = table.Column<long>(type: "bigint", nullable: false)
@@ -179,9 +179,9 @@ namespace net_il_mio_fotoalbum.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_profile", x => x.ProfileId);
+                    table.PrimaryKey("PK_Profiles", x => x.ProfileId);
                     table.ForeignKey(
-                        name: "FK_profile_AspNetUsers_UserId",
+                        name: "FK_Profiles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -189,7 +189,7 @@ namespace net_il_mio_fotoalbum.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "image",
+                name: "Images",
                 columns: table => new
                 {
                     ImageId = table.Column<long>(type: "bigint", nullable: false)
@@ -206,17 +206,17 @@ namespace net_il_mio_fotoalbum.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_image", x => x.ImageId);
+                    table.PrimaryKey("PK_Images", x => x.ImageId);
                     table.ForeignKey(
-                        name: "FK_image_profile_ProfileId",
+                        name: "FK_Images_Profiles_ProfileId",
                         column: x => x.ProfileId,
-                        principalTable: "profile",
+                        principalTable: "Profiles",
                         principalColumn: "ProfileId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "message",
+                name: "Messages",
                 columns: table => new
                 {
                     MessageId = table.Column<long>(type: "bigint", nullable: false)
@@ -231,11 +231,11 @@ namespace net_il_mio_fotoalbum.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_message", x => x.MessageId);
+                    table.PrimaryKey("PK_Messages", x => x.MessageId);
                     table.ForeignKey(
-                        name: "FK_message_profile_ProfileId",
+                        name: "FK_Messages_Profiles_ProfileId",
                         column: x => x.ProfileId,
-                        principalTable: "profile",
+                        principalTable: "Profiles",
                         principalColumn: "ProfileId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -251,15 +251,15 @@ namespace net_il_mio_fotoalbum.Migrations
                 {
                     table.PrimaryKey("PK_CategoryImage", x => new { x.CategoriesCategoryId, x.ImagesImageId });
                     table.ForeignKey(
-                        name: "FK_CategoryImage_category_CategoriesCategoryId",
+                        name: "FK_CategoryImage_Categories_CategoriesCategoryId",
                         column: x => x.CategoriesCategoryId,
-                        principalTable: "category",
+                        principalTable: "Categories",
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CategoryImage_image_ImagesImageId",
+                        name: "FK_CategoryImage_Images_ImagesImageId",
                         column: x => x.ImagesImageId,
-                        principalTable: "image",
+                        principalTable: "Images",
                         principalColumn: "ImageId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -304,8 +304,8 @@ namespace net_il_mio_fotoalbum.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_category_category_name",
-                table: "category",
+                name: "IX_Categories_category_name",
+                table: "Categories",
                 column: "category_name",
                 unique: true);
 
@@ -315,18 +315,18 @@ namespace net_il_mio_fotoalbum.Migrations
                 column: "ImagesImageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_image_ProfileId",
-                table: "image",
+                name: "IX_Images_ProfileId",
+                table: "Images",
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_message_ProfileId",
-                table: "message",
+                name: "IX_Messages_ProfileId",
+                table: "Messages",
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_profile_UserId",
-                table: "profile",
+                name: "IX_Profiles_UserId",
+                table: "Profiles",
                 column: "UserId",
                 unique: true);
         }
@@ -352,19 +352,19 @@ namespace net_il_mio_fotoalbum.Migrations
                 name: "CategoryImage");
 
             migrationBuilder.DropTable(
-                name: "message");
+                name: "Messages");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "category");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "image");
+                name: "Images");
 
             migrationBuilder.DropTable(
-                name: "profile");
+                name: "Profiles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

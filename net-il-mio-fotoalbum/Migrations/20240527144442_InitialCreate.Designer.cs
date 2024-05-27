@@ -12,7 +12,7 @@ using net_il_mio_fotoalbum.Data;
 namespace net_il_mio_fotoalbum.Migrations
 {
     [DbContext(typeof(FotoAlbumContext))]
-    [Migration("20240527124630_InitialCreate")]
+    [Migration("20240527144442_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -194,7 +194,7 @@ namespace net_il_mio_fotoalbum.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("net_il_mio_fotoalbum.Models.Image", b =>
@@ -239,7 +239,7 @@ namespace net_il_mio_fotoalbum.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("image");
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("net_il_mio_fotoalbum.Models.Message", b =>
@@ -279,7 +279,7 @@ namespace net_il_mio_fotoalbum.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("message");
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("net_il_mio_fotoalbum.Models.Profile", b =>
@@ -307,7 +307,7 @@ namespace net_il_mio_fotoalbum.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("profile");
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("net_il_mio_fotoalbum.Models.User", b =>
