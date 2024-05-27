@@ -28,6 +28,6 @@ namespace net_il_mio_fotoalbum.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        public FotoAlbumContext(DbContextOptions<FotoAlbumContext> options) : base(options) { }
+        //public FotoAlbumContext(DbContextOptions<FotoAlbumContext> options) : base(options) { }
     }
 }
