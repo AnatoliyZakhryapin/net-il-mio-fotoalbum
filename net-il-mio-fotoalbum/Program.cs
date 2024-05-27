@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Identity;
+using net_il_mio_fotoalbum.Data;
+using System.Text.Json.Serialization;
+
 namespace net_il_mio_fotoalbum
 {
     public class Program
@@ -6,8 +10,15 @@ namespace net_il_mio_fotoalbum
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddDbContext<FotoAlbumContext>();
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<FotoAlbumContext>();
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             var app = builder.Build();
 
@@ -24,11 +35,15 @@ namespace net_il_mio_fotoalbum
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapRazorPages();
 
             app.Run();
         }
