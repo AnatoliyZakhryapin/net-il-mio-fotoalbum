@@ -11,7 +11,8 @@ namespace net_il_mio_fotoalbum.Controllers
         [Route("/Admin/Categories")]
         public IActionResult Index()
         {
-            return View("/Views/Admin/Categories/Index.cshtml");
+            List<Category> categories = AdminManager.GetAllCategories();
+            return View("/Views/Admin/Categories/Index.cshtml", categories);
         }
 
         [HttpGet]

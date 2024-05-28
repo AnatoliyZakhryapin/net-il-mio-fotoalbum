@@ -3,10 +3,23 @@
     Layout = "_DashboardLayout";
 }
 
+@model List<Category>
+
 <div class="container">
     <div class="row">
         <div class="col">
             <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Create">Create Category</a>
         </div>
     </div>
+</div>
+
+<div class="container">
+    @foreach(Category category in Model)
+    {
+        <div class="row">
+            <div class="col">
+                <h1>@category.Name</h1>
+            </div>
+        </div>
+    }
 </div>
