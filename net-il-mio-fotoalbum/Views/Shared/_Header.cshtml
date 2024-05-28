@@ -1,42 +1,58 @@
-﻿
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-white box-shadow mb-3 py-3 fs-lg-5 fs-6">
+﻿@using Microsoft.AspNetCore.Identity
+@using net_il_mio_fotoalbum.Models
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
+    string currentPage = ViewData["CurrentPage"] as string;
+}
+
+<nav class="page-navbar py-3">
     <div class="container">
-        <div class="row justify-content-sm-between justify-content-end w-100 align-items-center flex-md-nowrap">
-            <div class="col-auto d-none d-md-block">
-                <figure>
-                    <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
-                        <img src="" alt="LOGO" class="m-0">
-                    </a>
-                </figure>
+        <div class="row justify-content-between align-items-center flex-md-nowrap">
+
+            @* LOGO *@
+            <div class="col-auto">
+                <div class="logo px-3 header-logo d-flex gap-2 align-items-center">
+                    <i class="logo_icon fa-solid fa-camera-retro"></i>
+                    <span class="d-none d-xl-block">MyPhotoAlbum</span>
+                </div>
             </div>
+
+            @* CENTRAL NAV  *@
             <div class="col-auto d-none d-sm-block">
-                <ul class="navbar-nav ms-auto gap-lg-3 gap-2">
+                <ul class="navbar-nav flex-row ms-auto gap-0 gap-lg-2 gap-xl-3 ">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
-                            <span><i class="fa-solid fa-house"></i></span>
-                            <span class="d-sm-none d-md-inline">Home</span>
+                        <a class="nav-link @(currentPage == "Home/Index" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+                            <span class="icon"><i class="fa-solid fa-house"></i></span>
+                            <span class="d-none d-lg-inline">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <span class="icon"><i class="icon fa-solid fa-people-group"></i></span>
+                            <span class="d-none d-lg-inline">About</span>
+                        </a>
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <span class="icon"><i class="fa-regular fa-address-book"></i></span>
+                            <span class="d-none d-lg-inline">Contact</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <span class="icon"><i class="fa-solid fa-shield-halved"></i></span>
+                            <span class="d-none d-lg-inline">Privacy</span>
                         </a>
                     </li>
                 </ul>
             </div>
+
+            @* USER CONTROLLER *@
             <div class="col-auto d-none d-sm-block" style="min-width: 138px;">
-                <div class="d-none d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav nav-underline ms-auto login d-sm-block">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <ul class="navbar-nav nav-underline ms-auto login d-sm-block">
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" aria-current="page" href="@Url.Action("Index", "Admin")">
-                                        <span><i class="fa-solid fa-user-tie"></i></span>
-                                        <span class="d-sm-none d-md-inline">Admin</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        }
-                    </ul>
-                    <!-- code omitted -->
-                    <partial name="_LoginPartial" />
-                </div>
+                <partial name="_LoginPartial" />
             </div>
             <div class="col-auto d-sm-none">
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"
@@ -48,34 +64,83 @@
             </div>
         </div>
     </div>
-</nav>
 
-@* <div class="offcanvas offcanvas-end w-100" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas offcanvas-end w-100" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">
+            <i class="logo_icon fa-solid fa-camera-retro"></i>
+            <span class="">MyPhotoAlbum</span>
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
         <ul class="navbar-nav ms-auto gap-lg-3 gap-2 py-3 border-3 border-bottom">
-            <li class="nav-item d-flex align-items-center justify-content-between">
-                <a class="nav-link text-dark @(currentPage == "Home/Index" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                <i class="fa-solid fa-angle-right"></i>
-            </li>
-            <li class="nav-item d-flex align-items-center justify-content-between">
-                <a class="nav-link text-dark @(currentPage == "Pizzeria/Index" || currentPage == "Pizzeria/Show" ? "active" : "")" asp-area="" asp-controller="Pizzeria" asp-action="Index">Menu</a>
-                <i class="fa-solid fa-angle-right"></i>
-            </li>
-            <li class="nav-item d-flex align-items-center justify-content-between">
-                <a class="nav-link text-dark @(currentPage == "Pizzeria/Create" ? "active" : "")" asp-area="" asp-controller="Pizzeria" asp-action="Create">Crea Pizza</a>
-                <i class="fa-solid fa-angle-right"></i>
-            </li>
-            <li class="nav-item d-flex align-items-center justify-content-between">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="fa-regular fa-circle-user login-icon"> <span>Log In</spaN> </i>
+            <li class="nav-item d-flex">
+                <a class="nav-link @(currentPage == "Home/Index" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="icon"><i class="fa-solid fa-house"></i></span>
+                    <span>Home</span>
                 </a>
-                <i class="fa-solid fa-angle-right"></i>
+            </li>
+              <li class="nav-item d-flex">
+                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="icon"><i class="icon fa-solid fa-people-group"></i></span>
+                    <span>About</span>
+                </a>
+            </li>
+             <li class="nav-item d-flex">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="icon"><i class="fa-regular fa-address-book"></i></span>
+                    <span>Contact</span>
+                </a>
+            </li>
+            <li class="nav-item d-flex">
+                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="icon"><i class="fa-solid fa-shield-halved"></i></span>
+                    <span>Privacy</span>
+                </a>
             </li>
         </ul>
-         <partial name="_LoginPartial" />
+
+
+        <ul class="navbar-nav login ms-auto gap-lg-3 gap-2 py-3 ">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="@Url.Action("Index", "Admin")">
+                        <span><i class="fa-solid fa-user-tie"></i></span>
+                        <span>Admin</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                        <span><i class="fa-solid fa-gear"></i></span>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button id="logout" type="submit" class="nav-link btn btn-link">
+                            <span> <i class="fa-solid fa-right-from-bracket login-icon"></i></span>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">
+                        <span><i class="fa-regular fa-address-card login-icon"></i></span>
+                        <span>Register</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">
+                        <span><i class="fa-regular fa-circle-user login-icon"></i></span>
+                        <span>Login</span>
+                    </a>
+                </li>
+            }
+        </ul>
     </div>
-</div> *@
+</div>

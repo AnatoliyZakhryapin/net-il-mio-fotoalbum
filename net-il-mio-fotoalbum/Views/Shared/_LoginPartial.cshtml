@@ -4,19 +4,26 @@
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
-<ul class="navbar-nav nav-underline ms-auto login d-sm-flex">
+<ul class="navbar-nav login d-flex flex-row justify-content-end align-items-center gap-0 gap-lg-2 gap-xl-3 ">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                Hello @UserManager.GetUserName(User)!
+            <a class="nav-link" aria-current="page" href="@Url.Action("Index", "Admin")">
+                <span><i class="fa-solid fa-user-tie"></i></span>
+                <span class="d-none d-lg-inline">Admin</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <span><i class="fa-solid fa-gear"></i></span>
+                <span class="d-none d-lg-inline">Hello @UserManager.GetUserName(User)!</span>
             </a>
         </li>
         <li class="nav-item">
             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-dark">
+                <button id="logout" type="submit" class="nav-link btn btn-link">
                     <span> <i class="fa-solid fa-right-from-bracket login-icon"></i></span>
-                    <span class="d-none d-md-inline">Logout</span>
+                    <span class="d-none d-xl-inline">Logout</span>
                 </button>
             </form>
         </li>
@@ -26,13 +33,13 @@
         <li class="nav-item">
             <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">
                 <span><i class="fa-regular fa-address-card login-icon"></i></span>
-                <span class="d-sm-none d-md-inline">Register</span>
+                <span class="d-none d-lg-inline">Register</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">
                 <span><i class="fa-regular fa-circle-user login-icon"></i></span>
-                <span class="d-sm-none d-md-inline">Login</span>
+                <span class="d-none d-lg-inline">Login</span>
             </a>
         </li>
     }

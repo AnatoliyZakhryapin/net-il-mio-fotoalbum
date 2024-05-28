@@ -19,6 +19,12 @@ namespace net_il_mio_fotoalbum.Controllers
 
         public IActionResult Index()
         {
+            string currentController = ControllerContext.RouteData.Values["controller"].ToString();
+            string currentAction = ControllerContext.RouteData.Values["action"].ToString();
+            string currentPage = $"{currentController}/{currentAction}";
+
+            ViewData["CurrentPage"] = currentPage;
+
             using FotoAlbumContext db = new FotoAlbumContext();
 
             var allImagesQuery = db.Images.Include(img => img.Categories).Include(img => img.Profile).Where(img => img.HasPermitVisibility == true && img.IsVisibile == true).AsQueryable();
