@@ -18,6 +18,14 @@ namespace net_il_mio_fotoalbum.Controllers
             return View("/Views/Admin/Images/Index.cshtml", images);
         }
 
+        [Route("/Admin/Images/{id}")]
+        public IActionResult Show (long id)
+        {
+            Image image = AdminManager.GetImageById(id);
+            return View("/Views/Admin/Images/Show.cshtml", image);
+        }
+
+
         [HttpGet]
         [Route("/Admin/Images/Create")]
         public IActionResult Create()

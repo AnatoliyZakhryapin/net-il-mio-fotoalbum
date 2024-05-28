@@ -61,6 +61,14 @@ namespace net_il_mio_fotoalbum.Data
             return db.Images.ToList();
         }
 
+        public static Image GetImageById(long id, bool includeReferences = false)
+        {
+            using FotoAlbumContext db = new FotoAlbumContext();
+            if (includeReferences)
+                return db.Images.Include(i => i.Categories).Include(i => i.Profile).FirstOrDefault(i => i.ImageId == id);
+            return db.Images.FirstOrDefault(i => i.ImageId == id);
+        }
+
         public static FormModel CreateFormModel(Image image = null)
         {
             FormModel formModel = new FormModel();
