@@ -10,8 +10,16 @@ namespace net_il_mio_fotoalbum.Models
         public string SenderEmail {  get; set; }
         public string MessageText { get; set; }
         public DateTime SendAt { get; set; }
-        public long SendedToProfileId { get; set; }
-        public Profile Profile { get; set; }
+        public long ProfileId { get; set; }
+        public Profile? Profile { get; set; }
         public Message() { }
+        public Message(string senderName, string senderSurname, string senderEmail, string messageText, long profileId)
+        {
+            SenderName = senderName;
+            SenderSurname = senderSurname;
+            SenderEmail = senderEmail;
+            MessageText = messageText;
+            ProfileId = profileId;
+        }       
     }
 }
