@@ -8,17 +8,14 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <form id="filterForm">
-                <input type="text" id="titleFilter" name="titleFilter" placeholder="Filter by title" onkeyup="GetPizzas()">
-                <div>
-                    @foreach (var category in Model.AllCategories)
-                    {
-                        <input type="checkbox" id="@category.Name" name="categoryFilter" value="@category.Name" onchange="GetPizzas()">
-                        <label for="@category.Name">@category.Name</label>
-                    }
-                </div>
-                <button onclick="GetPizzas()">Apply Filters</button>
-            </form>
+            <input type="text" id="titleFilter" name="titleFilter" placeholder="Filter by title" onkeyup="GetPizzas()">
+            <div>
+                @foreach (var category in Model.AllCategories)
+                {
+                    <input type="checkbox" id="@category.Name" name="categoryFilter" value="@category.Name" onchange="GetPizzas()">
+                    <label for="@category.Name">@category.Name</label>
+                }
+            </div>
             <div>
                 <div>
                     <input type="radio" id="sortByCreatedAt" name="sortBy" value="createdAt" onchange="GetPizzas()">
@@ -29,10 +26,33 @@
                     <label for="sortByLastUpdatedAt">Sort by Last Updated At</label>
                 </div>
             </div>
+            <button onclick="ResetFilters()">Reset Filters</button>
         </div>
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Aggiungi gli input per il messaggio -->
+                <input type="text" id="senderName" placeholder="Name">
+                <input type="text" id="senderSurname" placeholder="Surname">
+                <input type="email" id="senderEmail" placeholder="Email">
+                <textarea id="messageText" placeholder="Message"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                <button type="button" class="btn btn-primary" onclick="SendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <h1>Imagini dei altri</h1>
@@ -42,6 +62,47 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
+    function ResetFilters() {
+
+        document.getElementById('titleFilter').value = '';
+
+        const categoryCheckboxesDOMElements = document.querySelectorAll('input[name="categoryFilter"]');
+        categoryCheckboxesDOMElements.forEach(checkbox => checkbox.checked = false);
+
+        document.getElementById('sortByCreatedAt').checked = false;
+        document.getElementById('sortByLastUpdatedAt').checked = false;
+
+        GetPizzas();
+    }
+    function SendMessage() {
+
+        const sendedToProfileId = document.getElementById('exampleModal').getAttribute('data-sended-to-profile-id');
+
+        const senderName = document.getElementById('senderName').value;
+        const senderSurname = document.getElementById('senderSurname').value;
+        const senderEmail = document.getElementById('senderEmail').value;
+        const messageText = document.getElementById('messageText').value;
+
+        const message = {
+            SenderName: senderName,
+            SenderSurname: senderSurname,
+            SenderEmail: senderEmail,
+            MessageText: messageText,
+            ProfileId: sendedToProfileId
+        };
+
+        console.log(message)
+         // axios.post('https://localhost:7214/api/API/SendMessage', requestBody, { headers: { "Content-Type": "application/json" } })
+        axios.post('https://localhost:7214/api/API/SendMessage', message, { headers: { "Content-Type": "application/json" } })
+            .then(function (response) {
+                console.log(response);
+                alert('Messaggio inviato con successo!');
+            })
+            .catch(function (error) {
+                console.error(error);
+                alert('Si è verificato un errore durante l\'invio del messaggio.');
+            });
+    }
     function GetPizzas() {
         const titleFilter = document.getElementById('titleFilter').value;
         const categoryFilterElements = document.querySelectorAll('input[name="categoryFilter"]:checked');
@@ -53,12 +114,16 @@
             CategoryFilter: categoryFilter,
             SortBy: sortBy
         };
-        console.log(categoryFilterElements)
-        console.log(categoryFilter)
+
+        console.log(categoryFilterElements, Array.isArray(categoryFilterElements))
+        console.log(categoryFilter, Array.isArray(categoryFilter))
         console.log(queryParameters)
-        axios.get('https://localhost:7214/api/API',
+        axios.get('https://localhost:7214/api/API/Index',
             {
-                params: queryParameters
+                params: queryParameters,
+                paramsSerializer: {
+                    indexes: true,
+                }
             }).then(function (response) {
                 console.log(response)
                 const imagesContainerDOMElement = document.getElementById('imagesContainer');
@@ -83,6 +148,10 @@
                                     Edit
                                 </a>
                             </div>
+                                <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal(${image.imageId})">
+                                        Launch demo modal
+                                    </button>
                             <div class="col">
                                 <img src="${image.imgSrc}" />
                             </div>
@@ -95,6 +164,39 @@
                 console.log(error);
             });
 
+    }
+
+    function openModal(imageId) {
+        console.log("Modale aperto", imageId)
+
+
+        axios.get(`https://localhost:7214/api/API/GetImageById/${imageId}`)
+            .then(function (response) {
+                console.log(response.data);
+
+                const modalTitle = document.getElementById('exampleModalLabel');
+                const modalBody = document.querySelector('.modal-body');
+
+                modalTitle.textContent = `
+                            To: ${response.data.profile.name}  ${response.data.profile.surname}
+                    `
+                const sendedToProfileId = response.data.profile.profileId;
+
+                // Imposta SendedToProfileId nell'attributo data-bs-dismiss del modal
+                document.getElementById('exampleModal').setAttribute('data-sended-to-profile-id', sendedToProfileId);
+                // const imageDetails = `
+                //     <p><strong>FROM:</strong> ${response.data.imageId}</p>
+                //     <p><strong>Category:</strong> ${response.data.category}</p>
+                //     <p><strong>Description:</strong> ${response.data.description}</p>
+                //     <!-- Aggiungi altri dettagli se necessario -->
+                // `;
+
+  
+                // modalBody.innerHTML = imageDetails;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     GetPizzas();

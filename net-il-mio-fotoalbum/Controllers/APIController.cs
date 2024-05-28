@@ -7,13 +7,14 @@ using System.Globalization;
 
 namespace net_il_mio_fotoalbum.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class APIController : ControllerBase
     {
         [HttpGet]
         public IActionResult Index([FromQuery] APIQueryParameters queryParameters)
         {
+            //var context = HttpContext.Request.Query["CategoryFilter"].ToArray();
             using FotoAlbumContext db = new FotoAlbumContext();
 
             var allImagesQuery = db.Images.Include(img => img.Categories).Include(img => img.Profile).Where(img => img.HasPermitVisibility == true && img.IsVisibile == true).AsQueryable();
@@ -46,6 +47,45 @@ namespace net_il_mio_fotoalbum.Controllers
             var allCategories = AdminManager.GetAllCategories();
 
             return Ok(allImages);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetImageById(int id)
+        {
+            using FotoAlbumContext db = new FotoAlbumContext();
+            var image = db.Images
+                          .Include(img => img.Categories)
+                          .Include(img => img.Profile)
+                          .FirstOrDefault(img => img.ImageId == id);
+
+            if (image == null)
+            {
+                return NotFound(); // Immagine non trovata
+            }
+
+            return Ok(image); // Restituisce l'immagine trovata
+        }
+
+        [HttpPost]
+        public IActionResult SendMessage([FromBody] Message message)
+        {
+            try
+            {
+                using FotoAlbumContext db = new FotoAlbumContext();
+
+                message.SendAt = DateTime.Now;
+
+                db.Messages.Add(message);
+
+                db.SaveChanges();
+
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+      
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
