@@ -21,10 +21,19 @@ namespace net_il_mio_fotoalbum.Controllers
         [Route("/Admin/Images/{id}")]
         public IActionResult Show (long id)
         {
-            Image image = AdminManager.GetImageById(id);
-            return View("/Views/Admin/Images/Show.cshtml", image);
-        }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+
+            Image imageToShow = AdminManager.GetImageById(id);
+
+            if (imageToShow.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
+            {
+                return View("/Views/Admin/Images/Show.cshtml", imageToShow);
+            }
+
+            return RedirectToAction("Index");
+        }
 
         [HttpGet]
         [Route("/Admin/Images/Create")]
