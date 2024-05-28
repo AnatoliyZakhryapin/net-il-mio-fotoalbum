@@ -33,9 +33,9 @@
                         <span asp-validation-for="Image.Description" class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <img src="@Model.Image.ImgSrc">
+                        <img id="previewImage" src="@Model.Image.ImgSrc">
                         <label asp-for="ImageFormFile">Image file</label>
-                        <input type="file" asp-for="ImageFormFile" class="form-control" />
+                        <input type="file" asp-for="ImageFormFile" class="form-control" id="imageInput" />
                         <span asp-validation-for="ImageFormFile" class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
@@ -70,3 +70,16 @@
         </div>
     </div>
 </section>
+
+<script type="text/javascript">
+    document.getElementById('imageInput').addEventListener('change', function (event) {
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('previewImage').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
