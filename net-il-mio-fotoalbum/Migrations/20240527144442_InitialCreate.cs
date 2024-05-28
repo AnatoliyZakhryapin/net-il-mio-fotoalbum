@@ -201,7 +201,6 @@ namespace net_il_mio_fotoalbum.Migrations
                     HasPermitVisibility = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedByProfileId = table.Column<long>(type: "bigint", nullable: false),
                     ProfileId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
