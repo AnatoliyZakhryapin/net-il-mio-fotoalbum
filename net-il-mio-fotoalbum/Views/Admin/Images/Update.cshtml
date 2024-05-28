@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Components
+
+@{
+    ViewData["Title"] = "Edit Image";
+    Layout = "_CustomLayout";
+}
+
+@model FormModel
+
+<div class="container">
+    <div class="row">
+        <div class="col text-centr">
+            <h1>Update Image</h1>
+        </div>
+    </div>
+</div>
+
+
+<section class="create-image">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <form asp-controller="Image" asp-action="Update" asp-route-id="@Model.Image.ImageId" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group mb-3">
+                        <label asp-for="Image.Title" class="form-label">Title</label>
+                        <input asp-for="Image.Title" type="text" class="form-control" id="title" placeholder="Insert title of image">
+                        <span asp-validation-for="Image.Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Image.Description" class="form-label">Description</label>
+                        <textarea asp-for="Image.Description" type="text" class="form-control" id="description" placeholder="Insert description of image"> </textarea>
+                        <span asp-validation-for="Image.Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <img src="@Model.Image.ImgSrc">
+                        <label asp-for="ImageFormFile">Image file</label>
+                        <input type="file" asp-for="ImageFormFile" class="form-control" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <strong>Categories</strong>
+                        <select asp-for="SelectedCategories"
+                                multiple="multiple"
+                                size="10"
+                                class="form-control mb-2 mr-sm-2 ml-sm-3 leftList"
+                                asp-items="@Model.Categories">
+                        </select>
+                        <span asp-validation-for="SelectedCategories" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label>Is Visible</label><br />
+                        <input type="radio" asp-for="Image.IsVisibile" value="true" /> Yes
+                        <input type="radio" asp-for="Image.IsVisibile" value="false" /> No
+                        <span asp-validation-for="Image.IsVisibile" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label>Has Permit Visibility</label><br />
+                        <input type="radio" asp-for="Image.HasPermitVisibility" value="true" /> Yes
+                        <input type="radio" asp-for="Image.HasPermitVisibility" value="false" /> No
+                        <span asp-validation-for="Image.HasPermitVisibility" class="text-danger"></span>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary">Salva</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

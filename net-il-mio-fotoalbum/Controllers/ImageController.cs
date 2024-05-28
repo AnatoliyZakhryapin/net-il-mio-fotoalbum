@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using net_il_mio_fotoalbum.Data;
 using net_il_mio_fotoalbum.Models;
 using System.Security.Claims;
@@ -25,11 +27,11 @@ namespace net_il_mio_fotoalbum.Controllers
 
             Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
 
-            Image imageToShow = AdminManager.GetImageById(id);
+            Image image = AdminManager.GetImageById(id);
 
-            if (imageToShow.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
+            if (image.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
             {
-                return View("/Views/Admin/Images/Show.cshtml", imageToShow);
+                return View("/Views/Admin/Images/Show.cshtml", image);
             }
 
             return RedirectToAction("Index");
@@ -71,6 +73,65 @@ namespace net_il_mio_fotoalbum.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult Update(long id ) 
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+
+            Image image = AdminManager.GetImageById(id);
+
+            if (image.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
+            {
+                if (image != null)
+                {
+                    FormModel model = AdminManager.CreateFormModel(image);
+                    return View("/Views/Admin/Images/Update.cshtml", model);
+                }
+                else
+                    return NotFound();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(long id, FormModel formModel)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+
+            Image image = AdminManager.GetImageById(id);
+
+            if (image.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
+            {
+                if (!ModelState.IsValid)
+                {
+                    if (ModelState["ImageFormFile"].ValidationState != ModelValidationState.Invalid || ModelState.Values.Count(v => v.ValidationState == ModelValidationState.Invalid) != 1)
+                    {
+                        formModel.CreateCategories();
+                        formModel.Image.ImageId = id;
+                        formModel.Image.ImageFile = image.ImageFile;
+                        return View("/Views/Admin/Images/Update.cshtml", formModel);
+                    }
+                }
+
+                formModel.SetImageFileFromFormFile();
+                formModel.Image.ProfileId = loggedProfile.ProfileId;
+
+                bool result = AdminManager.UpdateImage(id, formModel.Image, formModel.SelectedCategories);
+
+                if (result == true)
+                    return RedirectToAction("Show", new { id = id });
+                else
+                            return NotFound();
+            }
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete (long id)
@@ -79,9 +140,9 @@ namespace net_il_mio_fotoalbum.Controllers
 
             Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
 
-            Image imageToDelete = AdminManager.GetImageById(id);
+            Image image = AdminManager.GetImageById(id);
 
-            if (imageToDelete.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
+            if (image.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
             {
                 AdminManager.DeleteImage(id);
             }

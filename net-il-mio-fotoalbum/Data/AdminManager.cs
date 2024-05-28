@@ -77,11 +77,11 @@ namespace net_il_mio_fotoalbum.Data
             {
                 formModel.Image = image;
                 formModel.CreateCategories();
+                return formModel;
             }
 
             formModel.Image = new Image ();
             formModel.CreateCategories();
-
             return formModel;
         }
 
@@ -96,6 +96,47 @@ namespace net_il_mio_fotoalbum.Data
             db.Images.Remove(imageToDelete);
             db.SaveChanges();
             return true;
+        }
+
+        public static bool UpdateImage(long id, Image imageUpdated, List<string> SelectedCategories)
+        {
+            using FotoAlbumContext db = new FotoAlbumContext();
+            var imageToUpdate = db.Images.Where(i => i.ImageId == id).Include(i => i.Categories).FirstOrDefault();
+
+            if (imageToUpdate != null)
+            {
+                imageToUpdate.Title = imageUpdated.Title;
+                imageToUpdate.Description = imageUpdated.Description;
+                imageToUpdate.IsVisibile = imageUpdated.IsVisibile;
+                imageToUpdate.HasPermitVisibility = imageUpdated.HasPermitVisibility;
+                imageToUpdate.ProfileId = imageUpdated.ProfileId;
+                imageToUpdate.CreatedAt = imageUpdated.CreatedAt;
+                imageToUpdate.LastUpdatedAt = DateTime.UtcNow;
+
+                if (imageUpdated.ImageFile != null && imageUpdated.ImageFile.Length > 0)
+                {
+                    imageToUpdate.ImageFile = imageUpdated.ImageFile;
+                }
+
+                imageToUpdate.Categories.Clear();
+                if (SelectedCategories != null)
+                {
+                    foreach (string i in SelectedCategories)
+                    {
+                        int idCategory = int.Parse(i);
+                        Category category = db.Categories.FirstOrDefault(c => c.CategoryId == idCategory);
+                        imageToUpdate.Categories.Add(category);
+                    }
+                }
+
+                db.SaveChanges();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

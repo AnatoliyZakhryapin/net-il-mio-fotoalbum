@@ -28,6 +28,10 @@
                         CANCELLA
                     </button>
                 </form>
+                <a href="@Url.Action("Update", "Image", new {id = image.ImageId} )" class="btn btn-custom btn-trasparent">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                    Edit
+                </a>
             </div>
             <div class="col">
                 <img src="@image.ImgSrc" />
