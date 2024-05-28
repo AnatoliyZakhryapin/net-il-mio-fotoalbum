@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using net_il_mio_fotoalbum.Data;
 
@@ -11,9 +12,10 @@ using net_il_mio_fotoalbum.Data;
 namespace net_il_mio_fotoalbum.Migrations
 {
     [DbContext(typeof(FotoAlbumContext))]
-    partial class FotoAlbumContextModelSnapshot : ModelSnapshot
+    [Migration("20240527202153_ImageFile")]
+    partial class ImageFile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,15 +215,16 @@ namespace net_il_mio_fotoalbum.Migrations
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("ImageFile")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<bool>("IsVisibile")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LastUpdatedAt")
+                    b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("ProfileId")
+                    b.Property<long>("ProfileId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Title")
@@ -438,7 +441,9 @@ namespace net_il_mio_fotoalbum.Migrations
                 {
                     b.HasOne("net_il_mio_fotoalbum.Models.Profile", "Profile")
                         .WithMany("Images")
-                        .HasForeignKey("ProfileId");
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Profile");
                 });
