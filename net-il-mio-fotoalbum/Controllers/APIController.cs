@@ -45,12 +45,6 @@ namespace net_il_mio_fotoalbum.Controllers
 
             var allCategories = AdminManager.GetAllCategories();
 
-            ImageIndexViewModel viewModel = new ImageIndexViewModel
-            {
-                AllImages = allImages,
-                AllCategories = allCategories
-            };
-
             return Ok(allImages);
         }
     }

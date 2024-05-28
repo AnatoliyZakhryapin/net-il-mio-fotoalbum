@@ -8,28 +8,27 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Image" asp-action="Create">Add Image</a>
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <form asp-action="Index" asp-controller="Image" method="get">
-                <input type="text" name="titleFilter" placeholder="Filter by title">
-
-                <select multiple name="categoryFilter">
+            <form id="filterForm">
+                <input type="text" id="titleFilter" name="titleFilter" placeholder="Filter by title" onkeyup="GetPizzas()">
+                <div>
                     @foreach (var category in Model.AllCategories)
                     {
-                        <option value="@category.Name">@category.Name</option>
+                        <input type="checkbox" id="@category.Name" name="categoryFilter" value="@category.Name" onchange="GetPizzas()">
+                        <label for="@category.Name">@category.Name</label>
                     }
-                </select>
-
-                <button type="submit">Apply Filters</button>
+                </div>
+                <button onclick="GetPizzas()">Apply Filters</button>
             </form>
-            <a asp-action="Index" asp-controller="Image" asp-route-sortBy="createdAt">Sort by Created At</a>
-            <a asp-action="Index" asp-controller="Image" asp-route-sortBy="lastUpdatedAt">Sort by Last Updated At</a>
+            <div>
+                <div>
+                    <input type="radio" id="sortByCreatedAt" name="sortBy" value="createdAt" onchange="GetPizzas()">
+                    <label for="sortByCreatedAt">Sort by Created At</label>
+                </div>
+                <div>
+                    <input type="radio" id="sortByLastUpdatedAt" name="sortBy" value="lastUpdatedAt" onchange="GetPizzas()">
+                    <label for="sortByLastUpdatedAt">Sort by Last Updated At</label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -37,29 +36,67 @@
 
 <div class="container">
     <h1>Imagini dei altri</h1>
-    @foreach (Image image in Model.AllImages)
-    {
-        <div class="row">
-            <div class="col">
-                <h1>@image.Title</h1>
-                <a href="@Url.Action("Show", "Image", new {id = image.ImageId} )" class="btn btn-custom">Dettaglio Image</a>
-                <form asp-controller="image" asp-action="Delete" asp-route-id="@image.ImageId" method="post" class="d-inline-block">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-custom btn-trasparent">
-                        <i class="fa-solid fa-trash"></i>
-                        CANCELLA
-                    </button>
-                </form>
-                <a href="@Url.Action("Update", "Image", new {id = image.ImageId} )" class="btn btn-custom btn-trasparent">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                    Edit
-                </a>
-            </div>
-            <div class="col">
-                <img src="@image.ImgSrc" />
-            </div>
-        </div>
-    }
-
+    <div id="imagesContainer"></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    function GetPizzas() {
+        const titleFilter = document.getElementById('titleFilter').value;
+        const categoryFilterElements = document.querySelectorAll('input[name="categoryFilter"]:checked');
+        const categoryFilter = Array.from(categoryFilterElements).map(checkbox => checkbox.value);
+        const sortBy = document.querySelector('input[name="sortBy"]:checked')?.value;
+
+        const queryParameters = {
+            TitleFilter: titleFilter,
+            CategoryFilter: categoryFilter,
+            SortBy: sortBy
+        };
+        console.log(categoryFilterElements)
+        console.log(categoryFilter)
+        console.log(queryParameters)
+        axios.get('https://localhost:7214/api/API',
+            {
+                params: queryParameters
+            }).then(function (response) {
+                console.log(response)
+                const imagesContainerDOMElement = document.getElementById('imagesContainer');
+                imagesContainerDOMElement.innerHTML = '';
+
+ 
+                response.data.forEach(image => {
+                    const imageElement = `
+                        <div class="row">
+                            <div class="col">
+                                <h1>${image.title}</h1>
+                                <a href="@Url.Action("Show", "Image")/${image.imageId}" class="btn btn-custom">Dettaglio Image</a>
+                                <form asp-controller="image" asp-action="Delete" asp-route-id="${image.imageId}" method="post" class="d-inline-block">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-custom btn-trasparent">
+                                        <i class="fa-solid fa-trash"></i>
+                                        CANCELLA
+                                    </button>
+                                </form>
+                                <a href="@Url.Action("Update", "Image")/${image.imageId}" class="btn btn-custom btn-trasparent">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                    Edit
+                                </a>
+                            </div>
+                            <div class="col">
+                                <img src="${image.imgSrc}" />
+                            </div>
+                        </div>
+                    `;
+                    imagesContainerDOMElement.innerHTML += imageElement;
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    }
+
+    GetPizzas();
+
+</script>
