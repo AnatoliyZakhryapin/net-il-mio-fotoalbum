@@ -11,7 +11,7 @@ namespace net_il_mio_fotoalbum.Controllers
         [Route("/Admin/Categories")]
         public IActionResult Index()
         {
-            return View("/Views/Admin/Category/Index.cshtml");
+            return View("/Views/Admin/Categories/Index.cshtml");
         }
 
         [HttpGet]
@@ -19,7 +19,7 @@ namespace net_il_mio_fotoalbum.Controllers
         public IActionResult Create()
         {
             Category category = new Category();
-            return View("/Views/Admin/Category/Create.cshtml", category);
+            return View("/Views/Admin/Categories/Create.cshtml", category);
         }
 
         [HttpPost]
@@ -30,7 +30,7 @@ namespace net_il_mio_fotoalbum.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("/Views/Admin/Category/Create.cshtml", data);
+                return View("/Views/Admin/Categories/Create.cshtml", data);
             }
 
             AdminManager.AddNewCategory(data);
