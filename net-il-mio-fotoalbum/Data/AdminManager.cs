@@ -98,6 +98,19 @@ namespace net_il_mio_fotoalbum.Data
             return true;
         }
 
+        public static bool DeleteCategory(long id)
+        {
+            using FotoAlbumContext db = new FotoAlbumContext();
+            var categoryToDelete = db.Categories.Find(id);
+
+            if (categoryToDelete == null)
+                return false;
+
+            db.Categories.Remove(categoryToDelete);
+            db.SaveChanges();
+            return true;
+        }
+
         public static bool UpdateImage(long id, Image imageUpdated, List<string> SelectedCategories)
         {
             using FotoAlbumContext db = new FotoAlbumContext();

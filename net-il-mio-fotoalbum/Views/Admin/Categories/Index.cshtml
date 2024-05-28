@@ -19,6 +19,13 @@
         <div class="row">
             <div class="col">
                 <h1>@category.Name</h1>
+                <form asp-controller="Category" asp-action="Delete" asp-route-id="@category.CategoryId" method="post" class="d-inline-block">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-custom btn-trasparent">
+                        <i class="fa-solid fa-trash"></i>
+                        CANCELLA
+                    </button>
+                </form>
             </div>
         </div>
     }

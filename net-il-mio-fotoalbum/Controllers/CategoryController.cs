@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using net_il_mio_fotoalbum.Data;
 using net_il_mio_fotoalbum.Models;
+using System.Security.Claims;
 
 namespace net_il_mio_fotoalbum.Controllers
 {
@@ -35,6 +36,16 @@ namespace net_il_mio_fotoalbum.Controllers
             }
 
             AdminManager.AddNewCategory(data);
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Delete(long id)
+        {
+            AdminManager.DeleteCategory(id);
             return RedirectToAction("Index");
         }
     }
