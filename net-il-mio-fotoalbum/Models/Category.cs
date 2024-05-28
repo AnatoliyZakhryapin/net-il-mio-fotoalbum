@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Pizzeria.Data.CustomValidationeRules;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +14,6 @@ namespace net_il_mio_fotoalbum.Models
         [Column("Name")]
         public string Name { get; set; }
         public List<Image>? Images { get; set; }
-        public Category() { }
+        public Category() { } 
     }
 }
