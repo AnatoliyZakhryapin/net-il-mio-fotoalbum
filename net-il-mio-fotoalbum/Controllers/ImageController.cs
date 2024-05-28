@@ -41,7 +41,7 @@ namespace net_il_mio_fotoalbum.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             Profile profile = AdminManager.GetProfileByUserId(userId);
-            formModel.Image.CreatedByProfileId = profile.ProfileId;
+            formModel.Image.ProfileId = profile.ProfileId;
 
             if (!ModelState.IsValid)
             {
@@ -59,6 +59,24 @@ namespace net_il_mio_fotoalbum.Controllers
                 return RedirectToAction("Index");
 
             ViewData["IsSaved"] = false;
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete (long id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+
+            Image imageToDelete = AdminManager.GetImageById(id);
+
+            if (imageToDelete.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
+            {
+                AdminManager.DeleteImage(id);
+            }
+
             return RedirectToAction("Index");
         }
     }

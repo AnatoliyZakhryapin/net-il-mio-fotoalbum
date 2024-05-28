@@ -84,5 +84,18 @@ namespace net_il_mio_fotoalbum.Data
 
             return formModel;
         }
+
+        public static bool DeleteImage(long id)
+        {
+            using FotoAlbumContext db = new FotoAlbumContext();
+            var imageToDelete = db.Images.Find(id);
+
+            if (imageToDelete == null)
+                return false;
+
+            db.Images.Remove(imageToDelete);
+            db.SaveChanges();
+            return true;
+        }
     }
 }
