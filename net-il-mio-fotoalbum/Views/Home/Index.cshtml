@@ -3,7 +3,63 @@
     Layout = "_CustomLayout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model ImageIndexViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Image" asp-action="Create">Add Image</a>
+        </div>
+    </div>
 </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form asp-action="Index" asp-controller="Image" method="get">
+                <input type="text" name="titleFilter" placeholder="Filter by title">
+
+                <select multiple name="categoryFilter">
+                    @foreach (var category in Model.AllCategories)
+                    {
+                        <option value="@category.Name">@category.Name</option>
+                    }
+                </select>
+
+                <button type="submit">Apply Filters</button>
+            </form>
+            <a asp-action="Index" asp-controller="Image" asp-route-sortBy="createdAt">Sort by Created At</a>
+            <a asp-action="Index" asp-controller="Image" asp-route-sortBy="lastUpdatedAt">Sort by Last Updated At</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <h1>Imagini dei altri</h1>
+    @foreach (Image image in Model.AllImages)
+    {
+        <div class="row">
+            <div class="col">
+                <h1>@image.Title</h1>
+                <a href="@Url.Action("Show", "Image", new {id = image.ImageId} )" class="btn btn-custom">Dettaglio Image</a>
+                <form asp-controller="image" asp-action="Delete" asp-route-id="@image.ImageId" method="post" class="d-inline-block">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-custom btn-trasparent">
+                        <i class="fa-solid fa-trash"></i>
+                        CANCELLA
+                    </button>
+                </form>
+                <a href="@Url.Action("Update", "Image", new {id = image.ImageId} )" class="btn btn-custom btn-trasparent">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                    Edit
+                </a>
+            </div>
+            <div class="col">
+                <img src="@image.ImgSrc" />
+            </div>
+        </div>
+    }
+
+</div>
+

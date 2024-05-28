@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using net_il_mio_fotoalbum.Data;
 using net_il_mio_fotoalbum.Models;
 using System.Diagnostics;
+using System.Globalization;
+using System.Security.Claims;
 
 namespace net_il_mio_fotoalbum.Controllers
 {
@@ -15,7 +19,21 @@ namespace net_il_mio_fotoalbum.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            using FotoAlbumContext db = new FotoAlbumContext();
+
+            var allImagesQuery = db.Images.Include(img => img.Categories).Include(img => img.Profile).Where(img => img.HasPermitVisibility == true && img.IsVisibile == true).AsQueryable();
+
+            List<Image> allImages = allImagesQuery.ToList();
+
+            var allCategories = AdminManager.GetAllCategories();
+
+            ImageIndexViewModel viewModel = new ImageIndexViewModel
+            {
+                AllImages = allImages,
+                AllCategories = allCategories
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()
