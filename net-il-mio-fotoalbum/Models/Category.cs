@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace net_il_mio_fotoalbum.Models
 {
@@ -13,7 +14,7 @@ namespace net_il_mio_fotoalbum.Models
         [MinLength(3, ErrorMessage = "The name must have at least 3 letters")]
         [Column("Name")]
         public string Name { get; set; }
-        public List<Image>? Images { get; set; }
+        [JsonIgnore] public List<Image>? Images { get; set; }
         public Category() { } 
     }
 }

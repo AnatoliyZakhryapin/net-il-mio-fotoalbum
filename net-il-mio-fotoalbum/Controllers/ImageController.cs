@@ -14,10 +14,67 @@ namespace net_il_mio_fotoalbum.Controllers
     {
         [HttpGet]
         [Route("/Admin/Images")]
-        public IActionResult Index()
+        public IActionResult Index(string? titleFilter, List<string>? categoryFilter, string? sortBy)
         {
-            List<Image> images = AdminManager.GetAllImages();
-            return View("/Views/Admin/Images/Index.cshtml", images);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            bool isAdmin = User.IsInRole("Admin");
+
+            using FotoAlbumContext db = new FotoAlbumContext();
+
+            var userImagesQuery = db.Images.Include(i => i.Categories).Include(i => i.Profile).Where(i => i.Profile.UserId == userId).AsQueryable();
+
+            IQueryable<Image> allImagesQuery = Enumerable.Empty<Image>().AsQueryable();
+
+            if (isAdmin)
+                allImagesQuery = db.Images.Include(i => i.Categories).Include(i => i.Profile).Where(img => img.Profile.UserId != userId);
+
+            if (!string.IsNullOrEmpty(titleFilter))
+            {
+                userImagesQuery = userImagesQuery.Where(img => img.Title.Contains(titleFilter));
+
+                if (isAdmin)
+                    allImagesQuery = allImagesQuery.Where(img => img.Title.Contains(titleFilter));
+            }
+
+            if (categoryFilter != null && categoryFilter.Any())
+            {
+                userImagesQuery = userImagesQuery.Where(img => img.Categories.Any(cat => categoryFilter.Contains(cat.Name)));
+
+                if (isAdmin)
+                    allImagesQuery = allImagesQuery.Where(img => img.Categories.Any(cat => categoryFilter.Contains(cat.Name)));
+            }
+
+            switch (sortBy)
+            {
+                case "createdAt":
+                    userImagesQuery = userImagesQuery.OrderBy(img => img.CreatedAt);
+                    if (isAdmin)
+                        allImagesQuery = allImagesQuery.OrderBy(img => img.CreatedAt);
+                    break;
+                case "lastUpdatedAt":
+                    userImagesQuery = userImagesQuery.OrderBy(img => img.LastUpdatedAt);
+                    if (isAdmin)
+                        allImagesQuery = allImagesQuery.OrderBy(img => img.LastUpdatedAt);
+                    break;
+                default:
+                    break;
+            }
+
+            List<Image> userImages = userImagesQuery.ToList();
+            List<Image> allImages = new List<Image>();
+            if (isAdmin)
+                allImages = allImagesQuery.ToList();
+
+            var allCategories = AdminManager.GetAllCategories();
+
+            ImageIndexViewModel viewModel = new ImageIndexViewModel
+            {
+                UserImages = userImages,
+                AllImages = allImages,
+                AllCategories = allCategories
+            };
+
+            return View("/Views/Admin/Images/Index.cshtml", viewModel);
         }
 
         [Route("/Admin/Images/{id}")]
