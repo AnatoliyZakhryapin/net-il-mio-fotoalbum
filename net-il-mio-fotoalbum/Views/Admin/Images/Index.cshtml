@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Image Page";
+    Layout = "_DashboardLayout";
+}
+
+@model List<Image>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Image" asp-action="Create">Add Image</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    @foreach(Image image in Model)
+    {
+        <div class="row">
+            <div class="col">
+                <h1>@image.Title</h1>
+            </div>
+            <div class="col">
+                <img src="@image.ImgSrc" />
+            </div>
+        </div>
+    }
+   
+</div>
