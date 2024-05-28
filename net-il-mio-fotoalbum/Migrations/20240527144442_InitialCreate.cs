@@ -225,7 +225,6 @@ namespace net_il_mio_fotoalbum.Migrations
                     SenderEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MessageText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SendAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SendedToProfileId = table.Column<long>(type: "bigint", nullable: false),
                     ProfileId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
