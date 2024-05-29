@@ -52,6 +52,21 @@ namespace net_il_mio_fotoalbum.Data
                 return db.Categories.Include(c => c.Images).ToList();
             return db.Categories.ToList();
         }
+        public static List<Message> GetProfilesMessages(long id, bool includeReferences = false)
+        {
+            using FotoAlbumContext db = new FotoAlbumContext();
+            if (includeReferences)
+                return db.Messages.Where(m => m.ProfileId == id).Include(m => m.Profile).ToList();
+            return db.Messages.Where(m => m.ProfileId == id).ToList();
+        }
+
+        public static Message GetMessageById(long id, bool includeReferences = false)
+        {
+            using FotoAlbumContext db = new FotoAlbumContext();
+            if (includeReferences)
+                return db.Messages.Include(m => m.Profile).FirstOrDefault(m => m.MessageId == id);
+            return db.Messages.FirstOrDefault(m => m.MessageId == id);
+        }
         public static List<Image> GetAllImages(bool includeReferences = false)
         {
             using FotoAlbumContext db = new FotoAlbumContext();
@@ -107,6 +122,19 @@ namespace net_il_mio_fotoalbum.Data
                 return false;
 
             db.Categories.Remove(categoryToDelete);
+            db.SaveChanges();
+            return true;
+        }
+
+        public static bool DeleteMessage(long id)
+        {
+            using FotoAlbumContext db = new FotoAlbumContext();
+            var messageToDelete = db.Messages.Find(id);
+
+            if (messageToDelete == null)
+                return false;
+
+            db.Messages.Remove(messageToDelete);
             db.SaveChanges();
             return true;
         }
