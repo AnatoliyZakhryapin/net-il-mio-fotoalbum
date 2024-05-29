@@ -233,3 +233,16 @@ input.form-control:focus {
 .access-icon i.denied {
     color: red;
 }
+
+.table.table-custom {
+    width: 100%;
+    text-align: center;
+    table-layout: fixed;
+}
+
+.table-custom th,
+.table-custom td{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

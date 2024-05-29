@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Messages Page";
+    Layout = "_DashboardLayout";
+}
+
+@model Message
+
+<section class="section-messages p-4 overflow-auto d-flex flex-column">
+
+    @* Title *@
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <h1>Message</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center gap-3">
+            <div class="col-12">
+                <div class="card card-message">
+                    <div class="card-header">
+                        <h3>@Model.GetFullName()</h3>
+                        <h5>@Model.SenderEmail</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">@Model.MessageText</p>
+
+                        <p class="time">@Model.SendAt</p>
+                        <form asp-controller="Message" asp-action="Delete" asp-route-id="@Model.MessageId" method="post" class="d-inline-block">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

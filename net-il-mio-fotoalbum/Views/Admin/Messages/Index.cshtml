@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Messages Page";
+    Layout = "_DashboardLayout";
+}
+
+@model List<Message>
+
+<section class="section-messages p-4 overflow-auto d-flex flex-column">
+
+    @* Title *@
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <h1>Messages</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center gap-3 d-none d-lg-flex">
+            <div class="col"> 
+                <table class="table table-custom">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Surname</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Message</th>
+                            <th scope="col">Date time</th>
+                            <th scope="col"></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int rowCounter = 1;
+                        }
+                        @foreach (var message in Model)
+                        {
+                            <tr>
+                                <th scope="row">@rowCounter</th>
+                                <td>@message.SenderName</td>
+                                <td>@message.SenderSurname</td>
+                                <td>@message.SenderEmail</td>
+                                <td>@message.MessageText</td>
+                                <td>@message.SendAt.ToString("g")</td>
+                                <td>
+                                    <a href="@Url.Action("Show", "Message", new {id = message.MessageId} )" class=""><i class="fa-solid fa-magnifying-glass"></i></a>
+                                    <form asp-controller="Message" asp-action="Delete" asp-route-id="@message.MessageId" method="post" class="d-inline-block">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            rowCounter++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="row justify-content-center d-lg-none gap-3">
+            @foreach (Message message in Model)
+            {
+                <div class="col-12">
+                    <div class="card card-message">
+                        <div class="card-header">
+                            <h3>@message.GetFullName()</h3>
+                            <h5>@message.SenderEmail</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">@message.MessageText</p>
+
+                            <p class="time">@message.SendAt</p>
+                            <a href="@Url.Action("Show", "Message", new {id = message.MessageId} )" class=""><i class="fa-solid fa-magnifying-glass"></i></a>
+                            <form asp-controller="Message" asp-action="Delete" asp-route-id="@message.MessageId" method="post" class="d-inline-block">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
