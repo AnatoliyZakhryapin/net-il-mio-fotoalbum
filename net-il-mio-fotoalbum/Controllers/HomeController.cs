@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Data;
 using net_il_mio_fotoalbum.Models;
@@ -51,6 +52,42 @@ namespace net_il_mio_fotoalbum.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        public IActionResult Contact()
+        {
+            Message message = new Message();
+            return View(message);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Contact(Message messageToSave)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Contact", messageToSave);
+            }
+
+            try
+            {
+                using FotoAlbumContext db = new FotoAlbumContext();
+
+                messageToSave.ProfileId = 1;
+                messageToSave.SendAt = DateTime.Now;
+
+                db.Messages.Add(messageToSave);
+
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+
+                return NotFound();
+            }
         }
     }
 }
