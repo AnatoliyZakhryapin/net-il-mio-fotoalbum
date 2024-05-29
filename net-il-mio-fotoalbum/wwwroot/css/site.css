@@ -177,18 +177,59 @@ li.nav-item button.nav-link:hover {
     color: white;
 }
 
-
-.btn-trasparent {
-    background-color: transparent;
-    padding: 12px 26px;
-    color: var(--orange);
-    border-color: var(--orange);
-}
-
-.btn-trasparent:hover {
-    background-color: var(--orange);
+.btn-custom.btn-violet-2 {
     color: white;
+    background-color: var(--bg01);
+    border-color: var(--f01)
 }
 
+.btn-custom.btn-violet-2:hover {
+    color: var(--f01);
+    border-color: var(--f01);
+    background-color: transparent;
+}
 
+.btn-custom:hover .btn-delete {
+    color: red;
+}
 
+/* DASHBOARD */
+.app_header {
+    /*border-right: 1px solid var(--bg11);*/
+}
+
+.main_header a{
+    /*color: var(--f11)!important;*/
+}
+
+.category {
+    border-radius: 10px;
+}
+
+.category .btn-delete {
+    border: none;
+}
+
+input.form-control:focus {
+    /*color: var(--f01) !important;*/
+    border-color: var(--bg01);
+    box-shadow: 0 0 0 .25rem var(--bg02);
+}
+
+.menu-icon i {
+    color: var(--f11);
+    font-size: 20px;
+}
+
+.menu-icon i:hover {
+    color: var(--f01);
+    scale: 1.3;
+}
+
+.access-icon i {
+    font-size: 20px;
+}
+
+.access-icon i.denied {
+    color: red;
+}

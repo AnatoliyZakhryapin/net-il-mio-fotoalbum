@@ -6,6 +6,8 @@
     <title>@ViewData["Title"] - FotoAlbum</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CheckBox.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/RadioBox.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/net-il-mio-fotoalbum.styles.css" asp-append-version="true" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,16 +15,21 @@
     <script src="https://kit.fontawesome.com/08d5002177.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="app d-flex flex-column">
-        <header class= "">
-            @Html.Partial("_DashboardHeader")
-        </header>
+    <div class="app d-flex flex-column overflow-hidden">
+        <div class="app_content d-flex flex-grow-1 overflow-hidden">
+            <header class="app_header border-end border-2 flex-shrink-0 p-3">
+                @Html.Partial("_DashboardHeader")
+            </header>
 
-        <main role="main" class="pb-3">
-           @RenderBody()
-        </main>
+            <main role="main" class="flex-grow-1 d-flex flex-column">
+                <div class="main_header py-3 border-bottom border-2">
+                    @Html.Partial("_DashboardMainHeader")
+                </div>
+                @RenderBody()
+            </main>
+        </div>
 
-        <footer class="border-top text-center mt-auto">
+        <footer class="app_footer border-top text-center py-4 d-flex overflow-hidden">
             @Html.Partial("_DashboardFooter")
         </footer>
     </div>

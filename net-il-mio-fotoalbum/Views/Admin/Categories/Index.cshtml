@@ -5,28 +5,42 @@
 
 @model List<Category>
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Create">Create Category</a>
-        </div>
-    </div>
-</div>
+<section class="section-categories p-4">
 
-<div class="container">
-    @foreach(Category category in Model)
-    {
-        <div class="row">
-            <div class="col">
-                <h1>@category.Name</h1>
-                <form asp-controller="Category" asp-action="Delete" asp-route-id="@category.CategoryId" method="post" class="d-inline-block">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-custom btn-trasparent">
-                        <i class="fa-solid fa-trash"></i>
-                        CANCELLA
-                    </button>
-                </form>
+    @* Title *@
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <h1>Categories</h1>
             </div>
         </div>
-    }
-</div>
+    </div>
+
+    @* Create btn *@
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <a class="btn-custom btn-violet-2" asp-area="" asp-controller="Category" asp-action="Create">Create Category</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center gap-3">
+            @foreach (Category category in Model)
+            {
+                <div class="col-auto">
+                    <div class="category btn-custom btn-trasparent align-items-center d-flex gap-3">
+                        <h2 class="m-0">@category.Name</h2>
+                        <form asp-controller="Category" asp-action="Delete" asp-route-id="@category.CategoryId" method="post" class="d-inline-block">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

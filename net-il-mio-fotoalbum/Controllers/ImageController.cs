@@ -84,7 +84,7 @@ namespace net_il_mio_fotoalbum.Controllers
 
             Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
 
-            Image image = AdminManager.GetImageById(id);
+            Image image = AdminManager.GetImageById(id, true);
 
             if (image.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
             {

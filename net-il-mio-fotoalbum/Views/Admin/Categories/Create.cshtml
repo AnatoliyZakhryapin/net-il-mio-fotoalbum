@@ -7,17 +7,18 @@
 
 @model Category
 
-<div class="container">
-    <div class="row">
-        <div class="col text-centr">
-           <h1>Create Category Form</h1>
+<section class="section-categories_create p-4">
+
+    @* Title *@
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <h1>Add new Category</h1>
+            </div>
         </div>
     </div>
-</div>
 
-
-
-<section class="create-pizza">
+    @* INPUT *@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-4">
@@ -28,7 +29,7 @@
                         <input asp-for="Name" type="text" class="form-control" id="name" placeholder="Insert name of category">
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
-                    <button type="submit" class="btn btn-primary">Salva</button>
+                    <button type="submit" class="btn-custom btn-violet">Add</button>
                 </form>
             </div>
         </div>

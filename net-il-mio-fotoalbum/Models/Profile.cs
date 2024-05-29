@@ -13,5 +13,10 @@ namespace net_il_mio_fotoalbum.Models
         public string UserId { get; set; }
         public User User { get; set; }
         public Profile() { }
+
+        public string GetFullName()
+        {
+            return $"{Name} {Surname}";
+        }
     }
 }

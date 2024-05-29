@@ -6,25 +6,48 @@
 
 @model Image 
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="card" style="width: 18rem;">
-                <img src="@Model.ImgSrc" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">@Model.Title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">An item</li>
-                    <li class="list-group-item">A second item</li>
-                    <li class="list-group-item">A third item</li>
-                </ul>
-                <div class="card-body">
-                    <a href="#" class="card-link">Card link</a>
-                    <a href="#" class="card-link">Another link</a>
+<section class="section-show-image overflow-auto py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <div class="card">
+                    <div class="card-header">
+                        Created by: @Model.Profile.GetFullName();
+                    </div>
+                    <img src="@Model.ImgSrc" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h3 class="card-title">Title: @Model.Title</h3>
+                        <h5 class="card-title">Categories: @foreach (var category in Model.Categories)
+                            {
+                                <span>@category.Name</span>
+                            } 
+                        </h5>
+                        <p class="card-text">Description: @Model.Description</p>
+
+                        <p class="card-text">CreatedAt: @Model.CreatedAt</p>
+
+                        <p class="card-text">UpdatedAt: @Model.LastUpdatedAt</p>
+                        <p class="card-text">IsVisibile: @Model.IsVisibile</p>
+                        <p class="card-text">HasPermitVisibility: @Model.HasPermitVisibility</p>
+
+                        <ul class="menu-icon d-flex justify-content-around">
+                            <li class="menu-item">
+                                <form asp-controller="image" asp-action="Delete" asp-route-id="@Model.ImageId" method="post" class="d-inline-block">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="border-0">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </li>
+                            <li class="menu-item">
+                                <a href="@Url.Action("Update", "Image", new {id = @Model.ImageId} )" class="">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>

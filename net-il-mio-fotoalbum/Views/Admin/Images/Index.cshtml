@@ -5,92 +5,185 @@
 
 @model ImageIndexViewModel
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Image" asp-action="Create">Add Image</a>
+<section class="section-image pt-5 overflow-auto">
+
+    @* ADD image  *@
+    <div class="container mb-4">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <a class="nav-link btn-custom btn-violet-2" asp-area="" asp-controller="Image" asp-action="Create">Add Image</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <form asp-action="Index" asp-controller="Image" method="get">
-                <input type="text" name="titleFilter" placeholder="Filter by title">
-
-                <select multiple name="categoryFilter">
+    @* FILTR *@
+    <div class="container">
+        <form asp-action="Index" asp-controller="Image" method="get">
+            <div class="row justify-content-center gap-3 mb-5">
+                <div class="col-auto d-flex align-items-center">
+                    <input type="text" id="titleFilter" name="titleFilter" placeholder="Filter by title">
+                </div>
+                <div class="col-auto d-flex gap-4 align-items-center">
+                    <div class="d-flex gap-2 flex-shrink-sm-0">
+                        <div class="checkbox-wrapper-12">
+                            <div class="cbx">
+                                <input type="radio" id="sortByCreatedAt" name="sortBy" value="createdAt" />
+                                <label for="cbx-12"></label>
+                                <svg width="15" height="14" viewBox="0 0 15 14" fill="none">
+                                    <path d="M2 8.36364L6.23077 12L13 2"></path>
+                                </svg>
+                            </div>
+                            <!-- Gooey -->
+                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+                                <defs>
+                                    <filter id="goo-12">
+                                        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"></feGaussianBlur>
+                                        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 22 -7" result="goo-12"></feColorMatrix>
+                                        <feBlend in="SourceGraphic" in2="goo-12"></feBlend>
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </div>
+                        <span>SortBy Created</span>
+                    </div>
+                    <div class="d-flex gap-2 flex-shrink-sm-0">
+                        <div class="checkbox-wrapper-12">
+                            <div class="cbx">
+                                <input type="radio" id="sortByLastUpdatedAt" name="sortBy" value="lastUpdatedAt" />
+                                <label for="cbx-12"></label>
+                                <svg width="15" height="14" viewBox="0 0 15 14" fill="none">
+                                    <path d="M2 8.36364L6.23077 12L13 2"></path>
+                                </svg>
+                            </div>
+                            <!-- Gooey -->
+                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+                                <defs>
+                                    <filter id="goo-12">
+                                        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"></feGaussianBlur>
+                                        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 22 -7" result="goo-12"></feColorMatrix>
+                                        <feBlend in="SourceGraphic" in2="goo-12"></feBlend>
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </div>
+                        <span>SortBy Updated</span>
+                    </div>
+                    <button class="btn-custom btn-violet flex-shrink-sm-0" type="submit">
+                        <i class="fa-solid fa-filter"></i> Filtr
+                    </button>
+                </div>
+                <div class="col-12 d-flex justify-content-center gap-4">
                     @foreach (var category in Model.AllCategories)
                     {
-                        <option value="@category.Name">@category.Name</option>
+                        <div class="checkbox-wrapper-33">
+                            <label class="checkbox" for="@category.Name">
+                                <input class="checkbox__trigger visuallyhidden" type="checkbox" id="@category.Name" name="categoryFilter" value="@category.Name" />
+                                <span class="checkbox__symbol">
+                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 14l8 7L24 7"> </path>
+                                    </svg>
+                                </span>
+                                <p class="checkbox__textwrapper">@category.Name</p>
+                            </label>
+                        </div>
                     }
-                </select>
+                </div>
+            </div>
+        </form>
+    </div>
 
-                <button type="submit">Apply Filters</button>
-            </form>
-            <a asp-action="Index" asp-controller="Image" asp-route-sortBy="createdAt">Sort by Created At</a>
-            <a asp-action="Index" asp-controller="Image" asp-route-sortBy="lastUpdatedAt">Sort by Last Updated At</a>
+    <div class="container py-3">
+        <h1 class="text-center mb-3">My images</h1>
+        <div class="row gap-3">
+            @foreach (Image image in Model.UserImages)
+            {
+                <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+                    <div class="card card-custom @(image.IsVisibile == false ? "border-danger" : "")">
+                        <figure class="position-relative">
+                            <img src="@image.ImgSrc" class="card-img-top" alt="...">
+                            <button type="button" class="d-none btn-custom btn-cover-image position-absolute top-50 start-50 translate-middle" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal(${image.imageId})">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <span>Open</span>
+                            </button>
+                            <span class="access-icon p-3 position-absolute top-0 end-0 d-flex gap-3">
+                                <i class=" fa-solid fa-eye-slash @(image.IsVisibile == false ? "denied" : "")"></i>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <i class="fa-solid fa-person-circle-minus @(image.HasPermitVisibility == false ? "denied" : "")"></i>
+                                }
+                            </span>
+                        </figure>
+                        <div class="card-body">
+                            <ul class="menu-icon d-flex justify-content-around">
+                                <li class="menu-item"><a href="@Url.Action("Show", "Image", new {id = image.ImageId} )" class=""><i class="fa-solid fa-magnifying-glass"></i></a></li>
+                                <li class="menu-item">
+                                    <form asp-controller="image" asp-action="Delete" asp-route-id="@image.ImageId" method="post" class="d-inline-block">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="border-0">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="@Url.Action("Update", "Image", new {id = image.ImageId} )" class="">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
-</div>
 
 
-<div class="container">
-    <h1>I miei imagini</h1>
-    @foreach(Image image in Model.UserImages)
+    @if (User.IsInRole("Admin"))
     {
-        <div class="row">
-            <div class="col">
-                <h1>@image.Title</h1>
-                <a href="@Url.Action("Show", "Image", new {id = image.ImageId} )" class="btn btn-custom">Dettaglio Image</a>
-                <form asp-controller="image" asp-action="Delete" asp-route-id="@image.ImageId" method="post" class="d-inline-block">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-custom btn-trasparent">
-                        <i class="fa-solid fa-trash"></i>
-                        CANCELLA
-                    </button>
-                </form>
-                <a href="@Url.Action("Update", "Image", new {id = image.ImageId} )" class="btn btn-custom btn-trasparent">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                    Edit
-                </a>
-            </div>
-            <div class="col">
-                <img src="@image.ImgSrc" />
+        <div class="container py-3">
+            <h1 class="text-center mb-3">Users images</h1>
+            <div class="row gap-3">
+                @foreach (Image image in Model.AllImages)
+                {
+                    <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+                        <div class="card card-custom @(image.IsVisibile == false || image.HasPermitVisibility == false ? "border-danger" : "")">
+                            <figure class="position-relative">
+                                <img src="@image.ImgSrc" class="card-img-top" alt="...">
+                                <button type="button" class="d-none btn-custom btn-cover-image position-absolute top-50 start-50 translate-middle" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal(${image.imageId})">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <span>Open</span>
+                                </button>
+                                <span class="access-icon p-3 position-absolute top-0 end-0 d-flex gap-3">
+                                    <i class=" fa-solid fa-eye-slash @(image.IsVisibile == false ? "denied" : "")"></i>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <i class="fa-solid fa-person-circle-minus @(image.HasPermitVisibility == false ? "denied" : "")"></i>
+                                    }
+                                </span>
+                            </figure>
+                            <div class="card-body">
+                                <ul class="menu-icon d-flex justify-content-around">
+                                    <li class="menu-item"><a href="@Url.Action("Show", "Image", new {id = image.ImageId} )" class=""><i class="fa-solid fa-magnifying-glass"></i></a></li>
+                                    <li class="menu-item">
+                                        <form asp-controller="image" asp-action="Delete" asp-route-id="@image.ImageId" method="post" class="d-inline-block">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="border-0">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="@Url.Action("Update", "Image", new {id = image.ImageId} )" class="">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     }
-</div>
-
-
-@if (User.IsInRole("Admin"))
-{
-    <div class="container">
-        <h1>Imagini dei altri</h1>
-        @foreach (Image image in Model.AllImages)
-        {
-            <div class="row">
-                <div class="col">
-                    <h1>@image.Title</h1>
-                    <a href="@Url.Action("Show", "Image", new {id = image.ImageId} )" class="btn btn-custom">Dettaglio Image</a>
-                    <form asp-controller="image" asp-action="Delete" asp-route-id="@image.ImageId" method="post" class="d-inline-block">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-custom btn-trasparent">
-                            <i class="fa-solid fa-trash"></i>
-                            CANCELLA
-                        </button>
-                    </form>
-                    <a href="@Url.Action("Update", "Image", new {id = image.ImageId} )" class="btn btn-custom btn-trasparent">
-                        <i class="fa-regular fa-pen-to-square"></i>
-                        Edit
-                    </a>
-                </div>
-                <div class="col">
-                    <img src="@image.ImgSrc" />
-                </div>
-            </div>
-        }
-
-    </div>
-}
+</section>
 
