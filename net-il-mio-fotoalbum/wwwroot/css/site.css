@@ -103,20 +103,80 @@ li.nav-item button.nav-link:hover {
     background-color: var(--f01);
 }
 
+/* FILTR */
+
+#titleFilter {
+    border-radius: 99px;
+    padding: 4px 16px;
+    border-color: var(--f11)
+}
+
+#titleFilter:focus {
+    border-color: var(--f01);
+    color: var(--f01);
+    outline: none;
+}
+
+/*MAIN PAGE*/
+
+.card.card-custom {
+    border-radius: 20px;
+}
+
+.card.card-custom img {
+    min-height: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.card.card-custom:hover img {
+    filter: brightness(50%) grayscale(1%) blur(6px);
+}
+
+.card.card-custom:hover button {
+    display: block!important;
+}
+
 /*BTN*/
 
 .btn-custom {
     border-radius: 99px;
-    /*border: 1px solid red;*/
-    background-color: var(--orange);
+    border: 1px solid var(--f11);
+    background-color: transparent;
+    padding: 12px 26px;
+    color: var(--f11);
+}
+
+.btn-custom:hover {
+    background-color: var(--bg11);
+    color: var(--f01);
+    border-color: var(--f01)
+}
+
+.btn-custom.btn-cover-image {
+    border-radius: 99px;
+    border: 2px solid white;
+    background-color: transparent;
     padding: 12px 26px;
     color: white;
 }
 
-.btn-custom:hover {
-    background-color: var(--light-gray);
-    color: black;
+.btn-custom.btn-cover-image:hover {
+    background-color: white;
+    color: var(--f11);
 }
+
+.btn-custom.btn-violet {
+    color: var(--f01);
+    border-color: var(--f01)
+}
+
+.btn-custom.btn-violet:hover {
+    background-color: var(--bg01);
+    color: white;
+}
+
 
 .btn-trasparent {
     background-color: transparent;
@@ -129,4 +189,6 @@ li.nav-item button.nav-link:hover {
     background-color: var(--orange);
     color: white;
 }
+
+
 

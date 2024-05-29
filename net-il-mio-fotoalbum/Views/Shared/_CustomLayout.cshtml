@@ -6,6 +6,8 @@
     <title>@ViewData["Title"] - FotoAlbum</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CheckBox.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/RadioBox.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/net-il-mio-fotoalbum.styles.css" asp-append-version="true" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +24,7 @@
            @RenderBody()
         </main>
 
-        <footer class="border-top text-center mt-auto">
+        <footer class="border-top text-center mt-auto py-4">
             @Html.Partial("_Footer")
         </footer>
     </div>

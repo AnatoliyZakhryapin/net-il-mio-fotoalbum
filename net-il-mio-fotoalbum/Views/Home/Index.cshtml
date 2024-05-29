@@ -5,31 +5,85 @@
 
 @model ImageIndexViewModel
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <input type="text" id="titleFilter" name="titleFilter" placeholder="Filter by title" onkeyup="GetPizzas()">
-            <div>
+<section class="main-page pt-5">
+
+    @* FILTR *@
+    <div class="container">
+        <div class="row justify-content-center gap-3 mb-5">
+            <div class="col-auto d-flex align-items-center">
+                <input type="text" id="titleFilter" name="titleFilter" placeholder="Filter by title" onkeyup="GetImages()">
+            </div>
+            <div class="col-auto d-flex gap-4 align-items-center">
+                <div class="d-flex gap-2 flex-shrink-sm-0">
+                    <div class="checkbox-wrapper-12">
+                        <div class="cbx">
+                            <input type="radio" id="sortByCreatedAt" name="sortBy" value="createdAt" onchange="GetImages()" />
+                            <label for="cbx-12"></label>
+                            <svg width="15" height="14" viewBox="0 0 15 14" fill="none">
+                                <path d="M2 8.36364L6.23077 12L13 2"></path>
+                            </svg>
+                        </div>
+                        <!-- Gooey -->
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+                            <defs>
+                                <filter id="goo-12">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"></feGaussianBlur>
+                                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 22 -7" result="goo-12"></feColorMatrix>
+                                    <feBlend in="SourceGraphic" in2="goo-12"></feBlend>
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>SortBy Created</span>
+                </div>
+                <div class="d-flex gap-2 flex-shrink-sm-0">
+                    <div class="checkbox-wrapper-12">
+                        <div class="cbx">
+                            <input type="radio" id="sortByLastUpdatedAt" name="sortBy" value="lastUpdatedAt" onchange="GetImages()" />
+                            <label for="cbx-12"></label>
+                            <svg width="15" height="14" viewBox="0 0 15 14" fill="none">
+                                <path d="M2 8.36364L6.23077 12L13 2"></path>
+                            </svg>
+                        </div>
+                        <!-- Gooey -->
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+                            <defs>
+                                <filter id="goo-12">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"></feGaussianBlur>
+                                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 22 -7" result="goo-12"></feColorMatrix>
+                                    <feBlend in="SourceGraphic" in2="goo-12"></feBlend>
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>SortBy Updated</span>
+                </div>
+                <button class="btn-custom btn-violet flex-shrink-sm-0" onclick="ResetFilters()">
+                    <i class="fa-solid fa-eraser"></i> Reset
+                </button>
+            </div>
+            <div class="col-12 d-flex justify-content-center gap-4">
                 @foreach (var category in Model.AllCategories)
                 {
-                    <input type="checkbox" id="@category.Name" name="categoryFilter" value="@category.Name" onchange="GetPizzas()">
-                    <label for="@category.Name">@category.Name</label>
+                    <div class="checkbox-wrapper-33">
+                        <label class="checkbox" for="@category.Name">
+                            <input class="checkbox__trigger visuallyhidden" type="checkbox" id="@category.Name" name="categoryFilter" value="@category.Name" onchange="GetImages()" />
+                            <span class="checkbox__symbol">
+                                <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 14l8 7L24 7"> </path>
+                                </svg>
+                            </span>
+                            <p class="checkbox__textwrapper">@category.Name</p>
+                        </label>
+                    </div>
                 }
             </div>
-            <div>
-                <div>
-                    <input type="radio" id="sortByCreatedAt" name="sortBy" value="createdAt" onchange="GetPizzas()">
-                    <label for="sortByCreatedAt">Sort by Created At</label>
-                </div>
-                <div>
-                    <input type="radio" id="sortByLastUpdatedAt" name="sortBy" value="lastUpdatedAt" onchange="GetPizzas()">
-                    <label for="sortByLastUpdatedAt">Sort by Last Updated At</label>
-                </div>
-            </div>
-            <button onclick="ResetFilters()">Reset Filters</button>
         </div>
     </div>
-</div>
+
+
+</section>
+
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -39,24 +93,54 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <!-- Aggiungi gli input per il messaggio -->
-                <input type="text" id="senderName" placeholder="Name">
-                <input type="text" id="senderSurname" placeholder="Surname">
-                <input type="email" id="senderEmail" placeholder="Email">
-                <textarea id="messageText" placeholder="Message"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                <button type="button" class="btn btn-primary" onclick="SendMessage()">Send</button>
+            <div class="modal-body card">
+                <img src="..." class="card-img-top" alt="..." id="modal-card-img">
+                <div class="card-body">
+                    <h3 class="card-title">Title: <span id="modal-card-title"></span></h3>
+                    <h5 class="card-title">Categories: <span id="modal-card-categories"></span></h5>
+                    <p class="card-text">Description: <span id="modal-card-description"></span></p>
+                    <p class="card-text">CreatedAt: <span id="modal-card-createdat"></span></p>
+                    <button class="btn-custom btn-violet mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        <i class="fa-regular fa-envelope"></i>
+                        Contact me
+                    </button>
+                    <div class="collapse" id="collapseExample">
+                        <div class="row g-3">
+                            <div class="col">
+                                <label for="senderName" class="form-label">Name</label>
+                                <input id="senderName" type="text" class="form-control" placeholder="First name" aria-label="First name">
+                            </div>
+                            <div class="col">
+                                <label for="senderSurname" class="form-label">Surname</label>
+                                <input id="senderSurname" type="text" class="form-control" placeholder="Last name" aria-label="Last name">
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                          <div class="col-md-12">
+                            <label for="senderEmail" class="form-label">Email</label>
+                            <input id="senderEmail" type="email" class="form-control">
+                          </div>
+                        </div>
+ 
+                        <div class="mb-3">
+                            <label for="messageText" class="form-label">Message</label>
+                            <textarea id="messageText" class="form-control" rows="3"></textarea>
+                        </div>
+
+            @*             <<input type="text" id="senderName" placeholder="Name">
+                        <input type="text" id="senderSurname" placeholder="Surname">
+                        <input type="email" id="senderEmail" placeholder="Email">
+                        <textarea id="messageText" placeholder="Message"></textarea> *@
+                        <button type="button" class="btn-custom btn-violet" onclick="SendMessage()">Send</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <div class="container">
-    <h1>Imagini dei altri</h1>
-    <div id="imagesContainer"></div>
+    <div class="row" id="imagesContainer" style="row-gap: 20px"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -72,8 +156,9 @@
         document.getElementById('sortByCreatedAt').checked = false;
         document.getElementById('sortByLastUpdatedAt').checked = false;
 
-        GetPizzas();
+        GetImages()
     }
+
     function SendMessage() {
 
         const sendedToProfileId = document.getElementById('exampleModal').getAttribute('data-sended-to-profile-id');
@@ -92,18 +177,21 @@
         };
 
         console.log(message)
-         // axios.post('https://localhost:7214/api/API/SendMessage', requestBody, { headers: { "Content-Type": "application/json" } })
+
         axios.post('https://localhost:7214/api/API/SendMessage', message, { headers: { "Content-Type": "application/json" } })
             .then(function (response) {
                 console.log(response);
                 alert('Messaggio inviato con successo!');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+                modal.hide(); 
             })
             .catch(function (error) {
                 console.error(error);
                 alert('Si è verificato un errore durante l\'invio del messaggio.');
             });
     }
-    function GetPizzas() {
+
+    function GetImages() {
         const titleFilter = document.getElementById('titleFilter').value;
         const categoryFilterElements = document.querySelectorAll('input[name="categoryFilter"]:checked');
         const categoryFilter = Array.from(categoryFilterElements).map(checkbox => checkbox.value);
@@ -115,9 +203,10 @@
             SortBy: sortBy
         };
 
-        console.log(categoryFilterElements, Array.isArray(categoryFilterElements))
-        console.log(categoryFilter, Array.isArray(categoryFilter))
-        console.log(queryParameters)
+        // console.log(categoryFilterElements, Array.isArray(categoryFilterElements))
+        // console.log(categoryFilter, Array.isArray(categoryFilter))
+        // console.log(queryParameters)
+
         axios.get('https://localhost:7214/api/API/Index',
             {
                 params: queryParameters,
@@ -125,37 +214,23 @@
                     indexes: true,
                 }
             }).then(function (response) {
-                console.log(response)
+                console.log("Risposta del Get", response)
                 const imagesContainerDOMElement = document.getElementById('imagesContainer');
                 imagesContainerDOMElement.innerHTML = '';
 
  
                 response.data.forEach(image => {
                     const imageElement = `
-                        <div class="row">
-                            <div class="col">
-                                <h1>${image.title}</h1>
-                                <a href="@Url.Action("Show", "Image")/${image.imageId}" class="btn btn-custom">Dettaglio Image</a>
-                                <form asp-controller="image" asp-action="Delete" asp-route-id="${image.imageId}" method="post" class="d-inline-block">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-custom btn-trasparent">
-                                        <i class="fa-solid fa-trash"></i>
-                                        CANCELLA
-                                    </button>
-                                </form>
-                                <a href="@Url.Action("Update", "Image")/${image.imageId}" class="btn btn-custom btn-trasparent">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                    Edit
-                                </a>
+                            <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+                                    <div class="card card-custom position-relative">
+                                        <img src="${image.imgSrc}" class="card-img-top" alt="...">
+                                        <button type="button" class="d-none btn-custom btn-cover-image position-absolute top-50 start-50 translate-middle" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal(${image.imageId})">
+                                           <i class="fa-solid fa-magnifying-glass"></i>
+                                           <span>Open</span>
+                                        </button>
+                                    </div>
+                                </div>     
                             </div>
-                                <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal(${image.imageId})">
-                                        Launch demo modal
-                                    </button>
-                            <div class="col">
-                                <img src="${image.imgSrc}" />
-                            </div>
-                        </div>
                     `;
                     imagesContainerDOMElement.innerHTML += imageElement;
                 });
@@ -169,36 +244,36 @@
     function openModal(imageId) {
         console.log("Modale aperto", imageId)
 
-
         axios.get(`https://localhost:7214/api/API/GetImageById/${imageId}`)
             .then(function (response) {
-                console.log(response.data);
+                console.log("Get image by id", response.data);
 
                 const modalTitle = document.getElementById('exampleModalLabel');
                 const modalBody = document.querySelector('.modal-body');
+                const modalImg = document.getElementById('modal-card-img');
+                const modalCardTitle = document.getElementById('modal-card-title');
+                const modalCardCategories = document.getElementById('modal-card-categories');
+                const modalCardDescription = document.getElementById('modal-card-description');
+                const modalCardCreatedAt = document.getElementById('modal-card-createdat');
 
-                modalTitle.textContent = `
-                            To: ${response.data.profile.name}  ${response.data.profile.surname}
-                    `
+                const image = response.data;
+
+                modalTitle.textContent = `Created by: ${image.profile.name} ${image.profile.surname}`;
+                modalImg.src = image.imgSrc; // Assuming image.url contains the image URL
+                modalCardTitle.textContent = image.title;
+                modalCardCategories.textContent = image.categories.map(category => category.name).join(', ');
+                modalCardDescription.textContent = image.description;
+                modalCardCreatedAt.textContent = `Created at: ${new Date(image.createdAt).toLocaleString()}`;
+
                 const sendedToProfileId = response.data.profile.profileId;
-
-                // Imposta SendedToProfileId nell'attributo data-bs-dismiss del modal
                 document.getElementById('exampleModal').setAttribute('data-sended-to-profile-id', sendedToProfileId);
-                // const imageDetails = `
-                //     <p><strong>FROM:</strong> ${response.data.imageId}</p>
-                //     <p><strong>Category:</strong> ${response.data.category}</p>
-                //     <p><strong>Description:</strong> ${response.data.description}</p>
-                //     <!-- Aggiungi altri dettagli se necessario -->
-                // `;
 
-  
-                // modalBody.innerHTML = imageDetails;
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
 
-    GetPizzas();
+    GetImages();
 
 </script>
