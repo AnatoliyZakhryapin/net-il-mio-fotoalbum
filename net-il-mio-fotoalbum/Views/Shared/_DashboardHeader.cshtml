@@ -16,7 +16,7 @@
             <div class="col-auto">
                 <div class="logo px-2 header-logo d-flex gap-2 align-items-center">
                     <i class="logo_icon fa-solid fa-camera-retro"></i>
-                    <span class="d-none d-sm-inline">MyPhotoAlbum</span>
+                    <span class="d-none d-md-inline">MyPhotoAlbum</span>
                 </div>
             </div>
 
@@ -26,7 +26,7 @@
                     <li class="nav-item d-flex">
                         <a class="nav-link @(currentPage == "Home/Index" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
                             <span class="icon"><i class="fa-solid fa-house"></i></span>
-                            <span class="d-none d-sm-inline">Home</span>
+                            <span class="d-none d-md-inline">Home</span>
                         </a>
                     </li>
                     @if (User.IsInRole("Admin"))
@@ -34,20 +34,20 @@
                         <li class="nav-item d-flex">
                             <a class="nav-link" asp-area="" asp-controller="Category" asp-action="Index">
                                 <span class="icon"><i class="fa-solid fa-list"></i></span>
-                                <span class="d-none d-sm-inline">Categories</span>
+                                <span class="d-none d-md-inline">Categories</span>
                             </a>
                         </li>
                     }
                     <li class="nav-item d-flex">
                         <a class="nav-link" asp-area="" asp-controller="Image" asp-action="Index">
                             <span class="icon"><i class="fa-regular fa-image"></i></span>
-                            <span class="d-none d-sm-inline">Images</span>
+                            <span class="d-none d-md-inline">Images</span>
                         </a>
                     </li>
                     <li class="nav-item d-flex">
-                        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">
+                        <a class="nav-link" asp-area="" asp-controller="Message" asp-action="Index">
                             <span class="icon"><i class="fa-regular fa-envelope"></i></span>
-                            <span class="d-none d-sm-inline">Messages</span>
+                            <span class="d-none d-md-inline">Messages</span>
                         </a>
                     </li>
                     @if (User.IsInRole("Admin"))
@@ -55,7 +55,7 @@
                         <li class="nav-item d-flex">
                             <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">
                                 <span class="icon"><i class="fa-solid fa-users"></i></span>
-                                <span class="d-none d-sm-inline">Profiles</span>
+                                <span class="d-none d-md-inline">Profiles</span>
                             </a>
                         </li>
                     }
@@ -70,20 +70,20 @@
                         <li class="nav-item d-flex">
                             <a class="nav-link" aria-current="page" href="@Url.Action("Index", "Admin")">
                                 <span><i class="fa-solid fa-user-tie"></i></span>
-                                <span class="d-none d-sm-inline">Admin</span>
+                                <span class="d-none d-md-inline">Admin</span>
                             </a>
                         </li>
                         <li class="nav-item d-flex">
                             <a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                                 <span><i class="fa-solid fa-gear"></i></span>
-                                <span class="d-none d-sm-inline">Settings</span>
+                                <span class="d-none d-md-inline">Settings</span>
                             </a>
                         </li>
                         <li class="nav-item d-flex">
                             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                 <button id="logout" type="submit" class="nav-link btn btn-link">
                                     <span> <i class="fa-solid fa-right-from-bracket login-icon"></i></span>
-                                    <span class="d-none d-sm-inline">Logout</span>
+                                    <span class="d-none d-md-inline">Logout</span>
                                 </button>
                             </form>
                         </li>
@@ -93,13 +93,13 @@
                         <li class="nav-item d-flex">
                             <a class="nav-link" id="register" asp-area="Identity" asp-page="/Account/Register">
                                 <span><i class="fa-regular fa-address-card login-icon"></i></span>
-                                <span class="d-none d-sm-inline">Register</span>
+                                <span class="d-none d-md-inline">Register</span>
                             </a>
                         </li>
                         <li class="nav-item d-flex">
                             <a class="nav-link" id="login" asp-area="Identity" asp-page="/Account/Login">
                                 <span><i class="fa-regular fa-circle-user login-icon"></i></span>
-                                <span class="d-none d-sm-inline">Login</span>
+                                <span class="d-none d-md-inline">Login</span>
                             </a>
                         </li>
                     }
