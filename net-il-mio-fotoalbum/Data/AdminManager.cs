@@ -17,6 +17,19 @@ namespace net_il_mio_fotoalbum.Data
             catch { return false; }
         }
 
+        public static bool AddNewProfile(Profile profile)
+        {
+            try
+            {
+                using FotoAlbumContext db = new FotoAlbumContext();
+                db.Add(profile);
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+
         public static bool AddNewImage(Image image, List<string> selectedCategories) {
             try
             {
