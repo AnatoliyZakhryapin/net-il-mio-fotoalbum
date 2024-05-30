@@ -21,5 +21,10 @@ namespace net_il_mio_fotoalbum.Models
             MessageText = messageText;
             ProfileId = profileId;
         }       
+
+        public string GetFullName()
+        {
+            return $"{this.SenderName} {this.SenderSurname}";
+        }
     }
 }
