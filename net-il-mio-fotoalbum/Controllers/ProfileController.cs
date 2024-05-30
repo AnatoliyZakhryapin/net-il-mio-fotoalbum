@@ -19,15 +19,15 @@ namespace net_il_mio_fotoalbum.Controllers
         [Route("/Admin/Profile/Create")]
         public IActionResult Create()
         {
-            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            //Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+            Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
 
-            //if (loggedProfile == null)
-            //    return RedirectToAction("Create", "Profile");
+            if (loggedProfile != null)
+                return RedirectToAction("Index", "Admin");
 
 
-           FormModelProfile formModel = new FormModelProfile();
+            FormModelProfile formModel = new FormModelProfile();
 
             return View("/Views/Admin/Profiles/Create.cshtml", formModel); 
         }
