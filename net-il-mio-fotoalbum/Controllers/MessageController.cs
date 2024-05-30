@@ -12,7 +12,11 @@ namespace net_il_mio_fotoalbum.Controllers
         public IActionResult Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+
+            if (loggedProfile == null)
+                return RedirectToAction("Create", "Profile");
 
             List<Message> messages = AdminManager.GetProfilesMessages(loggedProfile.ProfileId);
 
@@ -25,8 +29,10 @@ namespace net_il_mio_fotoalbum.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+            if (loggedProfile == null)
+                return RedirectToAction("Create", "Profile");
 
-           Message message = AdminManager.GetMessageById(id, true);
+            Message message = AdminManager.GetMessageById(id, true);
 
             if (message.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
             {
@@ -41,7 +47,11 @@ namespace net_il_mio_fotoalbum.Controllers
         public IActionResult Delete(long id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+
+            if (loggedProfile == null)
+                return RedirectToAction("Create", "Profile");
 
             Message message = AdminManager.GetMessageById(id);
 

@@ -17,6 +17,12 @@ namespace net_il_mio_fotoalbum.Controllers
         public IActionResult Index(string? titleFilter, List<string>? categoryFilter, string? sortBy)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+
+            if (loggedProfile == null)
+                return RedirectToAction("Create", "Profile");
+
             bool isAdmin = User.IsInRole("Admin");
 
             using FotoAlbumContext db = new FotoAlbumContext();
@@ -84,6 +90,9 @@ namespace net_il_mio_fotoalbum.Controllers
 
             Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
 
+            if (loggedProfile == null)
+                return RedirectToAction("Create", "Profile");
+
             Image image = AdminManager.GetImageById(id, true);
 
             if (image.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
@@ -98,6 +107,13 @@ namespace net_il_mio_fotoalbum.Controllers
         [Route("/Admin/Images/Create")]
         public IActionResult Create()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+
+            if (loggedProfile == null)
+                return RedirectToAction("Create", "Profile");
+
             FormModel formModel = AdminManager.CreateFormModel();
             return View("/Views/Admin/Images/Create.cshtml", formModel);
         }
@@ -108,8 +124,13 @@ namespace net_il_mio_fotoalbum.Controllers
         public IActionResult Create(FormModel formModel)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Profile profile = AdminManager.GetProfileByUserId(userId);
-            formModel.Image.ProfileId = profile.ProfileId;
+
+            Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+
+            if (loggedProfile == null)
+                return RedirectToAction("Create", "Profile");
+
+            formModel.Image.ProfileId = loggedProfile.ProfileId;
 
             if (!ModelState.IsValid)
             {
@@ -137,6 +158,9 @@ namespace net_il_mio_fotoalbum.Controllers
 
             Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
 
+            if (loggedProfile == null)
+                return RedirectToAction("Create", "Profile");
+
             Image image = AdminManager.GetImageById(id);
 
             if (image.ProfileId == loggedProfile.ProfileId || User.IsInRole("Admin"))
@@ -160,6 +184,9 @@ namespace net_il_mio_fotoalbum.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+
+            if (loggedProfile == null)
+                return RedirectToAction("Create", "Profile");
 
             Image image = AdminManager.GetImageById(id);
 
@@ -196,6 +223,9 @@ namespace net_il_mio_fotoalbum.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             Profile loggedProfile = AdminManager.GetProfileByUserId(userId);
+
+            if (loggedProfile == null)
+                return RedirectToAction("Create", "Profile");
 
             Image image = AdminManager.GetImageById(id);
 
